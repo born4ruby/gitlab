@@ -1,0 +1,10 @@
+%ul.media-grid
+  - @project.users_projects.each do |up|
+    = render(:partial => 'team_members/show', :locals => {:member => up})
+
+:javascript
+  $(function(){
+    $('.repo-access-select, .project-access-select').live("change", function() { 
+      $(this.form).submit();
+    });
+  })

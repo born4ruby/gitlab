@@ -1,0 +1,44 @@
+.user_new
+  = form_for [:admin, @admin_user] do |f|
+    -if @admin_user.errors.any?
+      #error_explanation
+        %ul
+          - @admin_user.errors.full_messages.each do |msg|
+            %li= msg
+
+    .clearfix
+      = f.label :name
+      .input= f.text_field :name
+    .clearfix
+      = f.label :email
+      .input= f.text_field :email
+    .clearfix
+      = f.label :password
+      .input= f.password_field :password
+    .clearfix
+      = f.label :password_confirmation
+      .input= f.password_field :password_confirmation
+
+    .clearfix
+      = f.label :projects_limit
+      .input= f.text_field :projects_limit, :class => "small_input"
+
+    .clearfix
+      = f.label :skype
+      .input= f.text_field :skype
+    .clearfix
+      = f.label :linkedin
+      .input= f.text_field :linkedin
+    .clearfix
+      = f.label :twitter
+      .input= f.text_field :twitter
+    .clearfix
+      = f.label :admin do 
+        = f.check_box :admin
+        %span Administrator
+    .actions
+      = f.submit 'Save', :class => "btn primary"
+      - if @admin_user.new_record? 
+        = link_to 'Cancel', admin_users_path, :class => "btn"
+      - else 
+        = link_to 'Cancel', admin_user_path(@admin_user), :class => "btn"

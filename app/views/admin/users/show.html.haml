@@ -1,0 +1,97 @@
+%h3
+  = @admin_user.name
+  = link_to 'Edit', edit_admin_user_path(@admin_user), :class => "btn small right"
+
+%hr
+
+%table.zebra-striped
+  %tr
+    %td
+      %b
+        Email:
+    %td
+      = @admin_user.email
+  %tr
+    %td
+      %b
+        Admin:
+        %td= check_box_tag "admin", 1, @admin_user.admin, :disabled => :disabled
+  %tr
+    %td
+      %b
+        Projects limit:
+    %td
+      = @admin_user.projects_limit
+  - unless @admin_user.skype.empty?
+    %tr
+      %td
+        %b
+          Skype:
+      %td
+        = @admin_user.skype
+  - unless @admin_user.linkedin.empty?
+    %tr
+      %td
+        %b
+          Linkedin:
+      %td
+        = @admin_user.linkedin
+  - unless @admin_user.twitter.empty?
+    %tr
+      %td
+        %b
+          Twitter:
+      %td
+        = @admin_user.twitter
+
+%h3 Projects
+%hr
+
+%table.zebra-striped
+  %tr
+    %thead
+      %th Name
+      %th Project Access
+      %th Repository Access
+      %th
+      %th
+
+  - @admin_user.users_projects.each do |tm|
+    - project = tm.project
+    %tr
+      %td= link_to project.name, admin_project_path(project)
+      %td= select_tag :tm_project_access, options_for_select(Project.access_options, tm.project_access), :class => "medium project-access-select", :disabled => :disabled
+      %td= link_to 'Edit Access', edit_admin_team_member_path(tm), :class => "btn small"
+      %td= link_to 'Remove from team', admin_team_member_path(tm), :confirm => 'Are you sure?', :method => :delete, :class => "btn small danger"
+
+= form_tag team_update_admin_user_path(@admin_user), :class => "bulk_import", :method => :put  do 
+  %table
+    %thead
+      %tr
+        %th Projects
+        %th Project Access:
+        %th Repo Access:
+
+    %tr
+      %td= select_tag :project_ids, options_from_collection_for_select(@projects , :id, :name),  :multiple => true
+      %td= select_tag :project_access, options_for_select(Project.access_options), :class => "project-access-select"
+
+  .actions
+    = submit_tag 'Add', :class => "btn primary"
+
+
+:css 
+  form select { 
+    width:150px;
+  }
+
+  #project_ids {
+    width:300px;
+  }
+
+  
+:javascript 
+  $('select#project_ids').chosen();
+  $('select#repo_access').chosen();
+  $('select#project_access').chosen();
+

@@ -1,0 +1,21 @@
+= render "projects/project_head"
+
+%h3
+  = @snippet.title
+  %small= @snippet.file_name
+  - if can?(current_user, :admin_snippet, @project) || @snippet.author == current_user
+    = link_to "Edit", edit_project_snippet_path(@project, @snippet), :class => "btn small right"
+
+%hr
+
+.view_file
+  .view_file_header
+    %strong= @snippet.file_name
+  .data.no-padding
+    :erb
+      <%= raw @snippet.colorize %>
+.clear
+%br
+.snippet_notes= render "notes/notes"
+
+.clear

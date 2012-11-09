@@ -1,0 +1,41 @@
+%div.issue-form-holder
+  = form_for [@project, @issue], :remote => request.xhr? do |f|
+    %h3= @issue.new_record? ? "New Issue" : "Edit Issue ##{@issue.id}"
+    %hr
+    -if @issue.errors.any?
+      .alert-message.block-message.error
+        %ul
+          - @issue.errors.full_messages.each do |msg|
+            %li= msg
+
+    .clearfix
+      = f.label :assignee_id
+      .input= f.select(:assignee_id, @project.users.all.collect {|p| [ p.name, p.id ] }, { :include_blank => "Select user" })
+
+    .clearfix
+      = f.label :critical, "Critical"
+      .input= f.check_box :critical
+    
+    - unless @issue.new_record?
+      .clearfix
+        = f.label :closed
+        .input= f.check_box :closed
+
+    .clearfix
+      = f.label :title
+      .input= f.text_area :title, :maxlength => 255, :class => "xxlarge"
+    .actions
+      = f.submit 'Save', :class => "primary btn"
+
+      - if request.xhr?
+        = link_to "Cancel", "#back", :onclick => "backToIssues();", :class => "btn" 
+      - else 
+        - if @issue.new_record?
+          = link_to "Cancel", project_issues_path(@project), :class => "btn"
+        - else    
+          = link_to "Cancel", project_issue_path(@project, @issue), :class => "btn"
+
+
+      - unless @issue.new_record?
+        .right
+          = link_to 'Remove', [@project, @issue], :confirm => 'Are you sure?', :method => :delete, :class => "danger btn"

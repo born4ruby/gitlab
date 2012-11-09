@@ -1,0 +1,17 @@
+.bundle
+.rbx/
+db/*.sqlite3
+db/*.sqlite3-journal
+log/*.log
+tmp/
+.sass-cache/
+coverage/*
+*.swp
+public/uploads/
+.rvmrc
+.directory
+nohup.out
+Vagrantfile
+.vagrant
+config/gitlab.yml
+config/database.yml
